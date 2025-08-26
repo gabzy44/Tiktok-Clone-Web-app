@@ -28,6 +28,16 @@ jobs:
         uses: andstor/file-existence-action@v1
         with:
           files: 'composer.json'
+- name: Set up PHP 8.3
+  uses: shivammathur/setup-php@v2
+  with:
+    php-version: '8.3'
+    extensions: mbstring, bcmath, pdo_mysql, intl, curl, zip
+    coverage: none
+
+- name: Install Composer dependencies
+  run: composer install --no-dev --optimize-autoloader
+
 
       - name: Run composer install if composer.json exists
         if: steps.check_files.outputs.files_exists == 'true'
@@ -57,4 +67,5 @@ jobs:
           app-name: 'gabbyreel'
           slot-name: 'Production'
           package: .
+
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_DA7122B1B5394B088EF4CBDFC583729A }}
